@@ -38,6 +38,7 @@ export default function TransactionPage() {
   const [selectedTeam, setSelectedTeam] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState('');
 
   useEffect(() => {
     if (!activeOrganizationId) { setTeams([]); setSelectedTeam(''); return; }
@@ -108,7 +109,7 @@ export default function TransactionPage() {
     if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) { setError('Enter an amount greater than zero.'); return; }
     try {
       setSaving(true); setError('');
-      await createTeamExpenseTransaction(activeOrganizationId, selectedTeam, { amount: parsedAmount, description: description.trim() });
+      await createTeamExpenseTransaction(activeOrganizationId, selectedTeam, { amount: parsedAmount, description: description.trim(), category });
       setShowForm(false); setDescription(''); setAmount(''); setPage(1);
       const result = await fetchActivity(activeOrganizationId, teamFilter, query, 1);
       setItems(result.items); setPagination(result.pagination); setSummary(result.summary);
@@ -209,6 +210,7 @@ export default function TransactionPage() {
       <label className="form-label">Team<select required value={selectedTeam} onChange={(event) => setSelectedTeam(event.target.value)}>{teams.map((team) => <option key={team.id} value={team.id}>{team.name}</option>)}</select></label>
       <label className="form-label">Amount<div className="input-with-prefix"><span>{selectedTeamCurrency}</span><input required min="0.01" step="0.01" type="number" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="0.00"/></div></label>
       <label className="form-label">Description<input required maxLength={240} value={description} onChange={(event) => setDescription(event.target.value)} placeholder="What was this expense for?"/></label>
+      <label className="form-label">Category<select value={category} onChange={(event) => setCategory(event.target.value)}><option value="">Uncategorized</option>{['Travel','Meals','Software','Supplies','Marketing','Transport','Other'].map((item) => <option key={item}>{item}</option>)}</select></label>
       {error && <div className="form-note" role="alert">{error}</div>}<div className="form-note"><ReceiptText size={16}/> The expense will be deducted from the selected team's budget.</div><div className="modal-actions"><button type="button" className="button button-secondary" onClick={() => setShowForm(false)} disabled={saving}>Cancel</button><button type="submit" className="button button-primary" disabled={saving || !teams.length}><Plus size={16}/>{saving ? 'Saving…' : 'Save expense'}</button></div></form></div>}
   </div>;
 }

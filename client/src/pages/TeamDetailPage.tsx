@@ -26,6 +26,7 @@ export default function TeamDetailPage() {
   const [remainingError, setRemainingError] = useState('');
   const [showTransactionForm, setShowTransactionForm] = useState(false);
   const [expenseDescription, setExpenseDescription] = useState('');
+  const [expenseCategory, setExpenseCategory] = useState('');
   const [expenseAmount, setExpenseAmount] = useState('');
   const [expenseSaving, setExpenseSaving] = useState(false);
   const [expenseSaved, setExpenseSaved] = useState(false);
@@ -103,7 +104,7 @@ export default function TeamDetailPage() {
     if (!Number.isFinite(amount) || amount <= 0 || !/^\d{1,12}(?:\.\d{1,2})?$/.test(expenseAmount)) { setFormError('Enter a positive amount with up to two decimal places.'); return; }
     setExpenseSaving(true);
     try {
-      await createTeamExpenseTransaction(organizationId, teamId, { amount, description: expenseDescription.trim() });
+      await createTeamExpenseTransaction(organizationId, teamId, { amount, description: expenseDescription.trim(), category: expenseCategory });
       setExpenseDescription(''); setExpenseAmount(''); setShowTransactionForm(false); setExpenseSaved(true);
       await loadDetail(organizationId);
     } catch (cause) { setFormError(cause instanceof Error ? cause.message : 'Could not record this expense.'); }
@@ -178,7 +179,7 @@ export default function TeamDetailPage() {
 
     {showTransactionForm && <form className="panel team-transaction-form" onSubmit={(event) => void submitExpense(event)}>
       <div className="team-form-heading"><div><h2>Record a team expense</h2><p>This creates an expense transaction and updates the team's ledger.</p></div><button type="button" className="icon-button" onClick={() => setShowTransactionForm(false)} aria-label="Close form">×</button></div>
-      <div className="team-form-grid"><label className="form-label">Description<input autoFocus required maxLength={500} value={expenseDescription} onChange={(event) => setExpenseDescription(event.target.value)} placeholder="e.g. Design software subscription"/></label><label className="form-label">Amount ({detail.budget?.currency ?? 'INR'})<input required type="number" min="0.01" step="0.01" value={expenseAmount} onChange={(event) => setExpenseAmount(event.target.value)} placeholder="0.00"/></label></div>
+      <div className="team-form-grid"><label className="form-label">Description<input autoFocus required maxLength={500} value={expenseDescription} onChange={(event) => setExpenseDescription(event.target.value)} placeholder="e.g. Design software subscription"/></label><label className="form-label">Amount ({detail.budget?.currency ?? 'INR'})<input required type="number" min="0.01" step="0.01" value={expenseAmount} onChange={(event) => setExpenseAmount(event.target.value)} placeholder="0.00"/></label><label className="form-label">Category<select value={expenseCategory} onChange={(event) => setExpenseCategory(event.target.value)}><option value="">Uncategorized</option>{['Travel','Meals','Software','Supplies','Marketing','Transport','Other'].map((item) => <option key={item}>{item}</option>)}</select></label></div>
       {formError && <p className="team-form-error" role="alert">{formError}</p>}<div className="team-form-footer"><span>Recorded by {user?.name || 'You'}</span><button type="button" className="button button-secondary" onClick={() => setShowTransactionForm(false)}>Cancel</button><button type="submit" className="button button-primary" disabled={expenseSaving}>{expenseSaving ? 'Saving…' : 'Save expense'}</button></div>
     </form>}
 

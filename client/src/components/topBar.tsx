@@ -1,16 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Building2, ChevronRight, FileClock, LayoutDashboard, Menu, ReceiptText, Search, Settings2, UsersRound, X } from 'lucide-react';
+import { Building2, ChevronRight, FileClock, LayoutDashboard, Menu, ReceiptText, Search, Settings2, UsersRound, X, Sparkles } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useOrganization } from '@/context/OrganizationContext';
 
-const labels: Record<string, string> = { '': 'Organizations', dashboard: 'Overview', organization: 'Organization details', teams: 'Teams & budgets', expenses: 'Transactions', 'audit-log': 'Audit log', settings: 'Settings', profile: 'My profile' };
+const labels: Record<string, string> = { '': 'Organizations', dashboard: 'Overview', organization: 'Organization details', teams: 'Teams & budgets', expenses: 'Transactions', 'audit-log': 'Audit log', 'spending-insights': 'Spending insights', settings: 'Settings', profile: 'My profile' };
 const destinations = [
   { to: '/dashboard', label: 'Overview', hint: 'Organization summary', icon: LayoutDashboard },
   { to: '/', label: 'Organizations', hint: 'Your workspaces', icon: Building2 },
   { to: '/teams', label: 'Teams & budgets', hint: 'Manage teams', icon: UsersRound },
   { to: '/expenses', label: 'Transactions', hint: 'Expenses and activity', icon: ReceiptText },
   { to: '/audit-log', label: 'Audit log', hint: 'Organization activity history', icon: FileClock },
+  { to: '/spending-insights', label: 'Spending insights', hint: 'AI spending questions and trends', icon: Sparkles },
   { to: '/settings', label: 'Settings', hint: 'Workspace preferences', icon: Settings2 },
 ];
 

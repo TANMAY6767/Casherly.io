@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Building2, LayoutDashboard, UsersRound, ReceiptText, Settings2, Sun, Moon, LogOut, X, WalletCards, FileClock } from 'lucide-react';
+import { Building2, LayoutDashboard, UsersRound, ReceiptText, Settings2, Sun, Moon, LogOut, X, WalletCards, FileClock, Sparkles } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useOrganization } from '@/context/OrganizationContext';
 
@@ -10,6 +10,7 @@ const navItems = [
   { to: '/teams', label: 'Teams & budgets', icon: UsersRound },
   { to: '/expenses', label: 'Transactions', icon: ReceiptText },
   { to: '/audit-log', label: 'Audit log', icon: FileClock },
+  { to: '/spending-insights', label: 'Spending insights', icon: Sparkles },
 ];
 
 type Props = { open: boolean; onClose: () => void; isDark: boolean; setIsDark: Dispatch<SetStateAction<boolean>> };

@@ -14,6 +14,7 @@ import TransactionPage from '@/pages/TransactionPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import SettingsPage from './pages/settings/SettingsPage';
 import AuditLogPage from './pages/AuditLogPage';
+import SpendingInsightsPage from './pages/SpendingInsightsPage';
 
 export default function App() {
   return (
@@ -46,6 +47,7 @@ export default function App() {
             <Route path="teams/:teamId" element={<TeamDetailPage />} />
             <Route path="expenses" element={<TransactionPage />} />
             <Route path="audit-log" element={<AuditLogPage />} />
+            <Route path="spending-insights" element={<SpendingInsightsPage />} />
             <Route path="organization" element={<OrganizationPage />} />
             <Route
               path="organization/:orgId"

@@ -10,6 +10,7 @@ import budgetRoutes from "./routes/budget.routes.js"
 import transactionRoutes from "./routes/transaction.routes.js"
 import reimbursementRoutes from "./routes/reimbursement.routes.js"
 import auditLogRoutes from "./routes/auditLogs.routes.js"
+import aiAnalyticsRoutes from "./routes/aiAnalytics.routes.js"
 import accountRoutes from "./routes/account.routes.js"
 import { ApiError } from "./utils/ApiError.js";
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/teams", accountRoutes);
 app.use("/", transactionRoutes);
 app.use("/", reimbursementRoutes);
 app.use("/audit-logs", auditLogRoutes);
+app.use("/org", aiAnalyticsRoutes);
 
 app.use((error, req, res, next) => {
     if (res.headersSent) return next(error);

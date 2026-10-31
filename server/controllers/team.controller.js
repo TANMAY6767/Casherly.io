@@ -492,6 +492,11 @@ const createTeamExpenseTransaction = asyncHandler(async (req, res) => {
   const userId = getUserId(req);
   const { orgId, teamId } = req.params;
   const { transactionType, amount, description } = req.body;
+  const categoryInput = typeof req.body.category === "string" ? req.body.category.trim() : "";
+  const allowedCategories = new Set(["Travel", "Meals", "Software", "Supplies", "Marketing", "Transport", "Other"]);
+  if (categoryInput && !allowedCategories.has(categoryInput)) {
+    throw new ApiError(statusType.BAD_REQUEST, "Choose a valid expense category.");
+  }
 
   if (!userId) {
     throw new ApiError(
@@ -545,6 +550,7 @@ const createTeamExpenseTransaction = asyncHandler(async (req, res) => {
     select: {
       id: true,
       organizationId: true,
+      budget: { select: { currency: true } },
     },
   });
 
@@ -654,6 +660,8 @@ const createTeamExpenseTransaction = asyncHandler(async (req, res) => {
         teamId,
         createdById: userId,
         transactionType: "EXPENSE",
+        currency: team.budget?.currency || "INR",
+        category: categoryInput || null,
         description: cleanDescription || null,
 
         ledgerEntries: {
@@ -679,6 +687,8 @@ const createTeamExpenseTransaction = asyncHandler(async (req, res) => {
         teamId: true,
         createdById: true,
         transactionType: true,
+        currency: true,
+        category: true,
         description: true,
         createdAt: true,
 
@@ -773,6 +783,7 @@ const createReimbursementClaim = asyncHandler(
       },
       select: {
         id: true,
+        budget: { select: { currency: true } },
       },
     });
 
@@ -867,6 +878,7 @@ const createReimbursementClaim = asyncHandler(
           employeeId: userId,
           teamId,
           amount: amountText,
+          currency: team.budget?.currency || "INR",
           description: cleanDescription,
           status: "PENDING",
         },
@@ -876,6 +888,7 @@ const createReimbursementClaim = asyncHandler(
           employeeId: true,
           teamId: true,
           amount: true,
+          currency: true,
           description: true,
           status: true,
           createdAt: true,
@@ -891,6 +904,7 @@ const createReimbursementClaim = asyncHandler(
           teamId,
           createdById: userId,
           transactionType: "REIMBURSEMENT_CLAIM",
+          currency: claim.currency,
           description:
             cleanDescription || "Employee reimbursement claim",
           referenceId: claim.id,
@@ -1050,6 +1064,7 @@ const payReimbursementClaim = asyncHandler(
           employeeId: true,
           teamId: true,
           amount: true,
+          currency: true,
           description: true,
           status: true,
         },
@@ -1135,6 +1150,7 @@ const payReimbursementClaim = asyncHandler(
           teamId: claim.teamId,
           createdById: userId,
           transactionType: "REIMBURSEMENT_PAYMENT",
+          currency: claim.currency,
           description: `Reimbursement payout: ${claim.description || claim.id
             }`,
           referenceId: claim.id,
@@ -1180,6 +1196,7 @@ const payReimbursementClaim = asyncHandler(
           employeeId: true,
           teamId: true,
           amount: true,
+          currency: true,
           description: true,
           status: true,
           updatedAt: true,
@@ -1294,6 +1311,7 @@ const approveReimbursementClaim = asyncHandler(
           employeeId: true,
           teamId: true,
           amount: true,
+          currency: true,
           description: true,
           status: true,
           createdAt: true,
@@ -1362,6 +1380,7 @@ const rejectReimbursementClaim = asyncHandler(
           employeeId: true,
           teamId: true,
           amount: true,
+          currency: true,
           description: true,
           status: true,
         },
@@ -1436,6 +1455,7 @@ const rejectReimbursementClaim = asyncHandler(
             teamId: claim.teamId,
             createdById: userId,
             transactionType: "REIMBURSEMENT_REJECTION_REVERSAL",
+            currency: claim.currency,
             description: `Reversal for rejected reimbursement claim ${claim.id}`,
             referenceId: claim.id,
 

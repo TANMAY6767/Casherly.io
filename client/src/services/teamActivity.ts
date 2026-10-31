@@ -51,10 +51,10 @@ export async function getTeamTransactions(orgId: string, teamId: string): Promis
   return response.data.transactions ?? [];
 }
 
-export async function createTeamExpenseTransaction(orgId: string, teamId: string, input: { amount: number; description: string }): Promise<TeamTransaction> {
+export async function createTeamExpenseTransaction(orgId: string, teamId: string, input: { amount: number; description: string; category?: string }): Promise<TeamTransaction> {
   const response = await apiClient.post<ApiEnvelope<TeamTransaction>>(
     `/org/${encodeURIComponent(orgId)}/teams/${encodeURIComponent(teamId)}/transactions`,
-    { transactionType: 'EXPENSE', amount: input.amount, description: input.description },
+    { transactionType: 'EXPENSE', amount: input.amount, description: input.description, category: input.category },
   );
   return unwrap(response, 'Could not record this team expense.');
 }

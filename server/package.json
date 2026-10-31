@@ -5,11 +5,14 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "test": "node --test tests/financialAnalytics.test.js"
   },
   "author": "Tanmay Dhole",
   "license": "ISC",
   "dependencies": {
+    "@langchain/core": "^1.2.17",
+    "@langchain/openai": "^1.6.2",
     "@prisma/client": "^6.19.3",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
@@ -19,7 +22,8 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.4.0",
     "prisma": "^6.19.3",
-    "resend": "^6.18.1"
+    "resend": "^6.18.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
