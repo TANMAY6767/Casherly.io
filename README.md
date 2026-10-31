@@ -1,4 +1,4 @@
-# CashFlow.ai
+# Casherly.io
 
 Casherly.io is a team and organization expense management app. It combines a React dashboard with an Express API and a PostgreSQL-backed double-entry ledger. Users can organize spending by organization and team, manage budgets and reimbursement claims, review audit activity, and explore ledger-backed spending summaries.
 
